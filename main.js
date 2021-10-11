@@ -5,11 +5,16 @@ const express_app = express();
 var rq_recent = require('./endpoints/recent.js');
 var rq_upcoming = require('./endpoints/upcoming.js');
 var rq_nextclash = require('./endpoints/nextclash.js');
+var rq_summoners = require('./endpoints/summoners.js');
+const bodyparser = require('body-parser')
+var urlencode = bodyparser.urlencoded({extended: false})
 const fs = require('fs')
 const TeemoJS = require('teemojs')
 const api_key = String(fs.readFileSync("./apikey.txt")).trim()
 const colors = require('colors')
 let lol = TeemoJS(api_key)
+
+console.log('\033[2J');
 
 console.log("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓")
 console.log("┃ Welcome to".bold, "LAMB".bold.yellow, "v1.0 - the", "Wolf Online League Feed".bold, "backend                     ┃")
@@ -21,6 +26,16 @@ console.log("┗━━━━━━━━━━━━━━━━━━━━━�
 express_app.use(express.json())
 
 // Endpoint routing values
+
+express_app.get('/summoners/:summoner', urlencode, (req, res) => {
+	res.send(rq_summoners.serve(req, res))	
+})
+express_app.post('/summoners/:summoner', urlencode, (req, res) => {
+	serve = rq_summoners.update(req, res)
+	res.status(serve["code"])
+	res.set("Content-Type", "application/json")
+	res.send(serve["message"])
+})
 
 express_app.get('/nextclash', (req, res) => {
 	res.send(rq_nextclash.serve())
@@ -44,42 +59,79 @@ const cachefile = "./store/playercache.json"
 var summoners = JSON.parse(fs.readFileSync("./config.json"))["team_members"]
 let summoners_data = []
 
-if(!fs.existsSync(cachefile)) {
-  console.log("Cachefile not found, forcing cache rebuild...")
-  fs.writeFileSync('./store/playercache.json', '[]')
-  summoners.forEach((summoner, i) => {
-    let summoner_dir = './team/summoners/' + summoner
-    let summoner_file = summoner_dir + "/summoner.json"
-    if(!fs.existsSync(summoner_dir)) {
-      fs.mkdirSync(summoner_dir, {recursive: true})
-    }
-    lol.get('euw1', 'summoner.getBySummonerName', summoner)
-    .then(function (data) {
+function rebuild_cache(resolve, reject) {
+	if(!fs.existsSync(cachefile)) {
+		console.log("[/cachecheck]".bold.grey, "Cachefile not found, forcing cache rebuild...")
+		fs.writeFileSync('./store/playercache.json', '[]')
+		var temp_i = 0
+		for(var summoner of summoners) {
+			let summoner_dir = './team/summoners/' + summoner
+			let summoner_file = summoner_dir + "/summoner.json"
+			if(!fs.existsSync(summoner_dir)) fs.mkdirSync(summoner_dir, {recursive: true})
+			try {
+				lol.get('euw1', 'summoner.getBySummonerName', summoner)
+				.then((data) => {
+					let cacheJson = fs.readFileSync('./store/playercache.json')
+					let players = JSON.parse(cacheJson)
+					players.push(data)
+					cacheJson = JSON.stringify(players)
+					fs.writeFileSync(cachefile, cacheJson)
+					if(!fs.existsSync(summoner_dir)) fs.mkdirSync(summoner_dir, {recursive: true})
+					fs.writeFileSync(summoner_file, JSON.stringify(data, null, 4))
+					temp_i += 1
+					if(temp_i === summoners.length - 1) resolve()
+					})
+				} catch (err) {
+					console.error(err)
+				}
+			}
+		} else {
+			resolve()
+		}
+	}
 
-      let cacheJson = fs.readFileSync('./store/playercache.json')
-      let players = JSON.parse(cacheJson)
-      players.push(data)
-      cacheJson = JSON.stringify(players)
-      fs.writeFileSync(cachefile, cacheJson)
-      console.log(i, summoner)
-      if(!fs.existsSync(summoner_dir)) {
-        fs.mkdirSync(summoner_dir, {recursive: true})
-      }
-      fs.writeFileSync(summoner_file, JSON.stringify(data, 4))
-    })
-    .catch()
-  });
+
+function clear_cache() {
+	// This functions checks for old summoners and removes them from the cache
+	// Runs once at the start of the program
+	var summoner_cache = fs.readdirSync("./team/summoners/")
+	var summoners = JSON.parse(fs.readFileSync("./config.json"))["team_members"]
+	var cache_invalid = false
+	for(var summoner of summoners) {
+		if(!summoner_cache.includes(summoner)) {
+			cache_invalid = true
+		}
+	}
+	for(var summoner of summoner_cache) {
+		if(!summoners.includes(summoner)) {
+			fs.rmSync("./team/summoners/" + summoner, { recursive: true, force: true })
+		}
+	}
+	if(cache_invalid) {
+		if(fs.existsSync("./store/playercache.json")) fs.rmSync("./store/playercache.json")
+		console.log("[/cachecheck]".grey.bold, "Cache invalid, forcing rebuild")
+	} else {
+		console.log("[/cachecheck]".grey.bold, "Cache valid, continuing")
+	}
 }
 
 function setup_timers() {
   // Execute all refreshes once
   rq_recent.refresh()
 	rq_nextclash.refresh()
+	rq_summoners.refresh()
 
   // Set interval for future updates
-  setInterval(rq_recent.refresh, 60000)
+  setInterval(rq_recent.refresh, 180000)
 	setInterval(rq_nextclash.refresh, 1800000)
+	setInterval(rq_summoners.refresh, 180000)
 }
 
-setup_timers()
-express_app.listen(3080, () => console.log("[/main]".bold.magenta, "Listening on port", "3080".magenta))
+clear_cache()
+var cache_cleared_promise = new Promise(rebuild_cache)
+
+cache_cleared_promise.then(() => {
+	console.log("[/cachecheck]".bold.grey, "Finished checking cache")
+	setup_timers()
+	express_app.listen(3080, () => console.log("[/main]".bold.magenta, "Listening on port", "3080".magenta))
+})

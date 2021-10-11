@@ -30,6 +30,8 @@ var rq_recent = {
     var match_ids_promise = new Promise((resolve, reject) => {
       var temp_i = 0
       summoners.forEach((summoner, i, arr) => {
+				let summoner_dir = "./team/summoners/" + summoner
+				if(!fs.existsSync(summoner_dir)) fs.mkdirSync(summoner_dir)
         let summoner_file = "./team/summoners/" + summoner + "/summoner.json"
         let match_file = "./team/summoners/" + summoner + "/matchhist.json"
         let summoner_raw = String(fs.readFileSync(summoner_file))
@@ -38,9 +40,9 @@ var rq_recent = {
 
         lol.get('europe', 'match.getMatchIdsByPUUID', puuid, {count: 20})
             .then((data) => {
-                fs.writeFileSync(match_file, JSON.stringify(data))
-          temp_i += 1
-          if(temp_i === arr.length - 1) resolve()
+              fs.writeFileSync(match_file, JSON.stringify(data))
+							temp_i += 1
+		          if(temp_i === arr.length) resolve()
         });
       });
     })
@@ -58,14 +60,15 @@ var rq_recent = {
         });
       });
 
-
       for(var id in match_ids_list) {
         if(match_ids_list[id] >= 3) {
           synced_match_ids.push(id)
         }
       }
 
+
       var sync_promise = new Promise((resolve, reject) => {
+				if(synced_match_ids.length == 0) resolve()
         synced_match_ids.forEach((id, i, arr) => {
           lol.get('europe', 'match.getMatch', id)
           .then((data) => {
