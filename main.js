@@ -87,10 +87,14 @@ function check_manifest() {
 	console.log("[/manifest]".bold.green, "Manifest check complete.")
 }
 
-/*function clear_cache() {
+function clear_cache() {
 	// This functions checks for old summoners and removes them from the cache
 	// Runs once at the start of the program
-	var summoner_cache = fs.readdirSync("./team/summoners/")
+	if(fs.existsSync("./team/summoners")) {
+		var summoner_cache = fs.readdirSync("./team/summoners/")
+	} else {
+		console.err("[/cachecheck]".bold.grey, "Error".bold.red + "couldn't find summoners directory")
+		return false
 	var summoners = JSON.parse(fs.readFileSync("./config.json"))["team_members"]
 	var cache_invalid = false
 	for(var summoner of summoners) {
@@ -109,7 +113,6 @@ function check_manifest() {
 	} else {
 		console.log("[/cachecheck]".grey.bold, "Cache valid, continuing")
 	}
-}*/
 
 function setup_timers() {
   // Execute all refreshes once
