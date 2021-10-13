@@ -4,7 +4,7 @@
   "description": "Lamb API: Backend for the Wolf Online League Feed",
   "main": "main.js",
   "scripts": {
-    "start": "node server.bundle.js",
+    "start": "node main.js",
     "build": "webpack",
     "dev": "nodemon ./main.js localhost 3080"
   },
