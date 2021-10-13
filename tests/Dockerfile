@@ -10,5 +10,5 @@ RUN echo '{ "team_name": "Team Solar", "team_tag": "TS", "team_members": [ "Micr
 RUN echo "RGAPI-1d7e3380-12b8-42f5-81b9-0ea2da67dfc6" > apikey.txt
 RUN npm install; exit 0;
 RUN npm rebuild
-CMD ["node", "main.js"]
+CMD ["npm rebuild", "npm run start"]
 EXPOSE 3080
