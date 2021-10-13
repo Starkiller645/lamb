@@ -4,9 +4,9 @@
   "description": "Lamb API: Backend for the Wolf Online League Feed",
   "main": "main.js",
   "scripts": {
-    "start": "node server.bundle.js",
-    "build": "webpack",
-    "dev": "nodemon ./main.js localhost 3080"
+    "start": "node main.js",
+    "dev": "nodemon ./main.js localhost 3080",
+    "tests": "cd tests; docker build . -t nodejs-lamb; docker run nodejs-lamb"
   },
   "license": "GPL",
   "dependencies": {

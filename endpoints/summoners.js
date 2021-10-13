@@ -20,6 +20,9 @@ const api_key = String(fs.readFileSync("./apikey.txt")).trim()
 let lol = TeemoJS(api_key)
 
 var rq_summoners = {
+	manifestdirs: ["./team/summoners"],
+	manifest: [],
+	required: ["./config.json", "./apikey.txt"],
 	update: function(req, res, summoner) {
 		console.log("[/summoners]".bold.brightBlue, "Received new data. Updating...".bold)
 		
