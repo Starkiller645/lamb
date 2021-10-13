@@ -113,6 +113,8 @@ function clear_cache() {
 	} else {
 		console.log("[/cachecheck]".grey.bold, "Cache valid, continuing")
 	}
+	}
+}
 
 function setup_timers() {
   // Execute all refreshes once
@@ -162,7 +164,7 @@ function rebuild_cache(resolve, reject) {
 	}
 
 console.log("[/cachecheck]".bold.grey, "Checking cache")
-//clear_cache()
+clear_cache()
 var cache_cleared_promise = new Promise(rebuild_cache)
 
 cache_cleared_promise.then(() => {
