@@ -6,7 +6,7 @@ RUN pacman -S nodejs npm semver git base-devel fakeroot --noconfirm
 ADD https://git.jacobtye.dev/api/v1/repos/Starkiller645/wolf-backend version.json
 RUN pacman -Syyu --noconfirm
 RUN mkdir -p /srv/lamb
-RUN git clone https://git.jacobtye.dev/Starkiller645/wolf-backend -b unstable /srv/lamb
+RUN git clone https://git.jacobtye.dev/Starkiller645/wolf-backend /srv/lamb
 WORKDIR /srv/lamb
 RUN git fetch
 RUN git pull
