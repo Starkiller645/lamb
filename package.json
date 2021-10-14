@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node main.js",
     "dev": "nodemon ./main.js localhost 3080",
-    "tests": "cd tests; docker build . -t nodejs-lamb; docker run nodejs-lamb",
+    "tests": "cd tests; docker build . -t nodejs-lamb; docker run -p 3080:3080 nodejs-lamb",
 		"clean-start": "rm -rf team; rm -rf store; echo 'RGAPI-df917278-ac1a-418e-b9ad-b062ac884f20' > apikey.txt; echo '{ \"team_name\": \"Team Solar\", \"team_tag\": \"TS\", \"team_members\": [ \"Microwabe\", \"Starkiller645\", \"PickleoDaRicko\", \"Meema09\", \"SGB2006\", \"Telstar112\", \"keyboard spams\" ] }' > config.json; git pull; node main.js"
   },
   "license": "GPL",
