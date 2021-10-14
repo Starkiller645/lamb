@@ -18,7 +18,7 @@ let lol = TeemoJS(api_key)
 
 var rq_recent = {
 	manifestdirs: ["./store", "./team/summoners/"],
-	manifest: ["./store/playercache.json", "./store/matchhist.json"],
+	manifest: ["./store/matchhist.json"],
 	required: ["./apikey.txt", "./config.json"],
   refresh: function () {
     console.log("[/recent]".bold.cyan, "Refreshing...".bold)

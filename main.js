@@ -141,7 +141,6 @@ function rebuild_cache(resolve, reject) {
 			let summoner_dir = './team/summoners/' + summoner
 			let summoner_file = summoner_dir + "/summoner.json"
 			if(!fs.existsSync(summoner_dir)) fs.mkdirSync(summoner_dir, {recursive: true})
-			try {
 				lol.get('euw1', 'summoner.getBySummonerName', summoner)
 				.then((data) => {
 					let cacheJson = fs.readFileSync('./store/playercache.json')
@@ -152,13 +151,14 @@ function rebuild_cache(resolve, reject) {
 					if(!fs.existsSync(summoner_dir)) fs.mkdirSync(summoner_dir, {recursive: true})
 					fs.writeFileSync(summoner_file, JSON.stringify(data, null, 4))
 					temp_i += 1
-					if(temp_i === summoners.length - 1) resolve()
+					if(temp_i === summoners.length - 1) {
+						console.log("[/cachecheck]".bold.grey, "All summoner data downloaded")
+						resolve()
+					}
 					})
-				} catch (err) {
-					console.error(err)
-				}
 			}
 		} else {
+			console.log("[/cachecheck]".bold.grey, "Cache OK, continuing")
 			resolve()
 		}
 	}
