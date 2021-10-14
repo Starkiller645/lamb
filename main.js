@@ -13,7 +13,7 @@ const colors = require('colors')
 console.log('\033[2J');
 
 console.log("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓")
-console.log("┃ Welcome to".bold, "LAMB".bold.yellow, "v1.0 - the", "Wolf Online League Feed".bold, "backend                     ┃")
+console.log("┃ Welcome to".bold, "LAMB".bold.yellow, "v0.1 - the", "Wolf Online League Feed".bold, "backend                     ┃")
 console.log("┃", "WOLF".bold.yellow, "is free software licensed under", "GPLv3".bold, "                                    ┃")
 console.log("┃ Source code is available @", "https://git.jacobtye.dev/Starkiller645/wolf-backend".bold.cyan, "┃")
 console.log("┃ WOLF was created by", "Jacob Tye".bold.yellow, "@", "https://jacobtye.dev".bold.cyan, "                          ┃")

@@ -1,6 +1,6 @@
 {
   "name": "lamb-api",
-  "version": "0.0.1",
+  "version": "0.1",
   "description": "Lamb API: Backend for the Wolf Online League Feed",
   "main": "main.js",
   "scripts": {
