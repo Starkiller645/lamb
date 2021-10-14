@@ -1,0 +1,24 @@
+{
+  "name": "lamb-api",
+  "version": "0.1",
+  "description": "Lamb API: Backend for the Wolf Online League Feed",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "dev": "nodemon ./main.js localhost 3080",
+    "tests": "cd tests; docker build . -t nodejs-lamb; docker run nodejs-lamb",
+		"clean-start": "rm -rf team; rm -rf store; echo 'RGAPI-df917278-ac1a-418e-b9ad-b062ac884f20' > apikey.txt; echo '{ \"team_name\": \"Team Solar\", \"team_tag\": \"TS\", \"team_members\": [ \"Microwabe\", \"Starkiller645\", \"PickleoDaRicko\", \"Meema09\", \"SGB2006\", \"Telstar112\", \"keyboard spams\" ] }' > config.json; git pull; node main.js"
+  },
+  "license": "GPL",
+  "dependencies": {
+    "@fightmegg/riot-api": "0.0.7",
+    "colors": "^1.4.0",
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^1.0.4",
+    "teemojs": "^1.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "webpack": "^4.43.0"
+  }
+}

@@ -17,6 +17,9 @@ const api_key = String(fs.readFileSync("./apikey.txt")).trim()
 let lol = TeemoJS(api_key)
 
 var rq_nextclash = {
+	manifestdirs: ["./store"],
+	manifest: ["./store/nextclash.json"],
+	required: ["./apikey.txt"],
 	refresh: function() {
 		console.log("[/nextclash]".bold.cyan, "Refreshing...".bold) 
 		lol.get("euw1", "clash.getTournaments").then((data) => {

@@ -11,12 +11,14 @@ const https = require('https')
 const cachefile = "./store/playercache.json"
 const TeemoJS = require('teemojs')
 const { ModuleFilenameHelpers } = require('webpack')
-
 const api_key = String(fs.readFileSync("./apikey.txt")).trim()
 
 let lol = TeemoJS(api_key)
 
 var rq_upcoming = {
+	manifestdirs: ["./team/events"],
+	manifest: ["./team/events/event.json"],
+	required: ["./apikey.txt"],
     update: function(req, res) {
         console.log("[/upcoming]".bold.brightBlue, "Received new data. Updating...".bold)
         if(!fs.existsSync("./team/events")) {

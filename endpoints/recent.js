@@ -17,6 +17,9 @@ const api_key = String(fs.readFileSync("./apikey.txt")).trim()
 let lol = TeemoJS(api_key)
 
 var rq_recent = {
+	manifestdirs: ["./store", "./team/summoners/"],
+	manifest: ["./store/matchhist.json"],
+	required: ["./apikey.txt", "./config.json"],
   refresh: function () {
     console.log("[/recent]".bold.cyan, "Refreshing...".bold)
     var cache = {}
