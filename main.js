@@ -1,5 +1,4 @@
 // Main script/entry point for Lamb API Program
-
 var express = require('express');
 const express_app = express();
 var rq_recent = require('./endpoints/recent.js');
@@ -151,7 +150,7 @@ function rebuild_cache(resolve, reject) {
 					if(!fs.existsSync(summoner_dir)) fs.mkdirSync(summoner_dir, {recursive: true})
 					fs.writeFileSync(summoner_file, JSON.stringify(data, null, 4))
 					temp_i += 1
-					if(temp_i === summoners.length - 1) {
+					if(temp_i === summoners.length) {
 						console.log("[/cachecheck]".bold.grey, "All summoner data downloaded")
 						resolve()
 					}
