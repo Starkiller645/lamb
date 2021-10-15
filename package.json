@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node main.js",
     "dev": "nodemon ./main.js localhost 3080",
-    "tests": "cd tests; docker build . -t nodejs-lamb; docker run -d --name nodejs-lamb -p 3080:3080 nodejs-lamb; bash lambtest; docker rm -f nodejs-lamb;",
-		"clean-start": "rm -rf team; rm -rf store; echo 'RGAPI-1368f396-591b-404d-9cdb-7307d3f99493' > apikey.txt; echo '{ \"team_name\": \"Team Solar\", \"team_tag\": \"TS\", \"team_members\": [ \"Microwabe\", \"Starkiller645\", \"PickleoDaRicko\", \"Meema09\", \"SGB2006\", \"Telstar112\", \"keyboard spams\" ] }' > config.json; git pull; node main.js"
+    "tests": "cd tests; docker build . -t nodejs-lamb; docker run -d -i --name nodejs-lamb -p 3080:3080 nodejs-lamb;sleep 6; bash lambtest;",
+    "clean-start": "rm -rf team; rm -rf store; echo 'RGAPI-1368f396-591b-404d-9cdb-7307d3f99493' > apikey.txt; echo '{ \"team_name\": \"Team Solar\", \"team_tag\": \"TS\", \"team_members\": [ \"Microwabe\", \"Starkiller645\", \"PickleoDaRicko\", \"Meema09\", \"SGB2006\", \"Telstar112\", \"keyboard spams\" ] }' > config.json; git pull; node main.js"
   },
   "license": "GPL",
   "dependencies": {
