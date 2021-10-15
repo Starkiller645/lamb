@@ -2,6 +2,7 @@
 
 GET_URLS=(upcoming nextclash summoners/Starkiller645 summoners/SGB2006 recent)
 echo -e "\033[1m\033[37m[lambtest]\033[0m Testing API endpoints on localhost:3080"
+sleep 5 
 for ep in "${GET_URLS[@]}"
 do
 	IDENT=$(tr "/" "." <<< ${ep})
