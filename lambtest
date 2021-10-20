@@ -15,5 +15,6 @@ do
 		echo -e "\033[1m[/${ep}]\033[31m Failed!\033[0m"
 		echo -e "\033[1m\033[91m${RES_CODE}\033[0m"
 	fi
+	find . -name "temp_*" -delete
 done
 echo -e "\033[1m\033[37m[lambtest]\033[0m Finished tests!"
