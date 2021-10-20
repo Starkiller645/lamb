@@ -25,6 +25,11 @@ var rq_nextclash = {
 		lol.get("euw1", "clash.getTournaments").then((data) => {
 			var clash = data
 			var nextclash = data[0]
+			if(typeof nextclash == typeof undefined) {
+				if(!fs.existsSync("./store/nextclash.json")) fs.writeFileSync("./store/nextclash.json", "{}")
+				console.log("[/nextclash]".bold.cyan, "No available data, did not update")
+				return
+			}
 
 			var name = nextclash["nameKey"]
 			name = name[0].toUpperCase() + name.slice(1)
