@@ -17,7 +17,7 @@ let lol = TeemoJS(api_key)
 
 var rq_upcoming = {
 	manifestdirs: ["./team/events"],
-	manifest: ["./team/events/event.json"],
+	manifest: ["./team/events/events.json"],
 	required: ["./apikey.txt"],
     update: function(req, res) {
         console.log("[/upcoming]".bold.brightBlue, "Received new data. Updating...".bold)
