@@ -66,11 +66,11 @@ express_app.get('/upcoming', (req, res) => {
 const cachefile = "./store/playercache.json"
 var summoners = JSON.parse(fs.readFileSync("./config.json"))["team_members"]
 let summoners_data = []
-const manifest_list = [rq_recent.manifest, rq_upcoming.manifest, rq_nextclash.manifest, rq_summoners.manifest]
+const manifest_list = [rq_recent.manifest, rq_upcoming.manifest, rq_nextclash.manifest, rq_summoners.manifest, rq_bans.manifest]
 let manifest = [].concat(...manifest_list)
-const manifest_dirs_list = [rq_recent.manifestdirs, rq_upcoming.manifestdirs, rq_nextclash.manifestdirs, rq_summoners.manifestdirs]
+const manifest_dirs_list = [rq_recent.manifestdirs, rq_upcoming.manifestdirs, rq_nextclash.manifestdirs, rq_summoners.manifestdirs, rq_bans.manifestdirs]
 let manifestdirs = [].concat(...manifest_dirs_list)
-const required_list = [rq_recent.required, rq_upcoming.required, rq_nextclash.required, rq_summoners.required]
+const required_list = [rq_recent.required, rq_upcoming.required, rq_nextclash.required, rq_summoners.required, rq_bans.required]
 let required = [].concat(...required_list)
 
 function check_manifest() {

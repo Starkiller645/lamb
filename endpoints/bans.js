@@ -20,7 +20,7 @@ var rq_bans = {
         console.log("[/bans]".bold.brightBlue, "Received new data. Updating...".bold)
         if(req.body.top != undefined && req.body.jgl != undefined && req.body.mid != undefined && req.body.bot != undefined && req.body.sup != undefined) {
             fs.writeFileSync("./store/bans.json", JSON.stringify(req.body, null, 4))
-            console.log("[/upcoming]".bold.brightBlue, "Done!".bold)
+            console.log("[/bans]".bold.brightBlue, "Done!".bold)
 		    return {code: 200, message: '{"response": 200, "message": "OK"}'}
         } else {
             console.log("[/bans]".bold.brightBlue, "Invalid data, did not update".bold)
@@ -28,7 +28,9 @@ var rq_bans = {
         }
     },
     serve: function (req, res) {
-        data = string(fs.readFileSync("./store/bans.json"))
+        data = String(fs.readFileSync("./store/bans.json"))
         return data
     }
 }
+
+module.exports = rq_bans
