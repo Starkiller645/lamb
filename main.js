@@ -6,6 +6,7 @@ var rq_upcoming = require('./endpoints/upcoming.js');
 var rq_nextclash = require('./endpoints/nextclash.js');
 var rq_summoners = require('./endpoints/summoners.js');
 var rq_bans = require('./endpoints/bans.js');
+var rq_picks = require('./endpoints/picks.js');
 const bodyparser = require('body-parser')
 var urlencode = bodyparser.urlencoded({extended: false})
 const fs = require('fs')
@@ -33,6 +34,17 @@ express_app.post('/bans', (req, res) => {
 
 express_app.get('/bans', (req, res) => {
 	res.send(rq_bans.serve(req, res))
+})
+
+express_app.post('/picks', (req, res) => {
+	serve = rq_picks.update(req, res)
+	res.status(serve["code"])
+	res.send(serve["message"])
+}
+)
+
+express_app.get('/picks', (req, res) => {
+	res.send(rq_picks.serve(req, res))
 })
 
 express_app.get('/summoners/:summoner', urlencode, (req, res) => {
@@ -66,11 +78,11 @@ express_app.get('/upcoming', (req, res) => {
 const cachefile = "./store/playercache.json"
 var summoners = JSON.parse(fs.readFileSync("./config.json"))["team_members"]
 let summoners_data = []
-const manifest_list = [rq_recent.manifest, rq_upcoming.manifest, rq_nextclash.manifest, rq_summoners.manifest, rq_bans.manifest]
+const manifest_list = [rq_recent.manifest, rq_upcoming.manifest, rq_nextclash.manifest, rq_summoners.manifest, rq_bans.manifest, rq_picks.manifestdirs]
 let manifest = [].concat(...manifest_list)
-const manifest_dirs_list = [rq_recent.manifestdirs, rq_upcoming.manifestdirs, rq_nextclash.manifestdirs, rq_summoners.manifestdirs, rq_bans.manifestdirs]
+const manifest_dirs_list = [rq_recent.manifestdirs, rq_upcoming.manifestdirs, rq_nextclash.manifestdirs, rq_summoners.manifestdirs, rq_bans.manifestdirs, rq_picks.manifestdirs]
 let manifestdirs = [].concat(...manifest_dirs_list)
-const required_list = [rq_recent.required, rq_upcoming.required, rq_nextclash.required, rq_summoners.required, rq_bans.required]
+const required_list = [rq_recent.required, rq_upcoming.required, rq_nextclash.required, rq_summoners.required, rq_bans.required, rq_picks.required]
 let required = [].concat(...required_list)
 
 function check_manifest() {
