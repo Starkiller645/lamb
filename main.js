@@ -5,6 +5,7 @@ var rq_recent = require('./endpoints/recent.js');
 var rq_upcoming = require('./endpoints/upcoming.js');
 var rq_nextclash = require('./endpoints/nextclash.js');
 var rq_summoners = require('./endpoints/summoners.js');
+var rq_bans = require('./endpoints/bans.js');
 const bodyparser = require('body-parser')
 var urlencode = bodyparser.urlencoded({extended: false})
 const fs = require('fs')
@@ -22,6 +23,17 @@ console.log("┗━━━━━━━━━━━━━━━━━━━━━�
 express_app.use(express.json())
 
 // Endpoint routing values
+
+express_app.post('/bans', (req, res) => {
+	serve = rq_bans.update(req, res)
+	res.status(serve["code"])
+	res.send(serve["message"])
+}
+)
+
+express_app.get('/bans', (req, res) => {
+	res.send(rq_bans.serve(req, res))
+})
 
 express_app.get('/summoners/:summoner', urlencode, (req, res) => {
 	res.send(rq_summoners.serve(req, res))	
@@ -94,6 +106,7 @@ function clear_cache() {
 	} else {
 		console.err("[/cachecheck]".bold.grey, "Error".bold.red + "couldn't find summoners directory")
 		return false
+	}
 	var summoners = JSON.parse(fs.readFileSync("./config.json"))["team_members"]
 	var cache_invalid = false
 	for(var summoner of summoners) {
@@ -111,7 +124,6 @@ function clear_cache() {
 		console.log("[/cachecheck]".grey.bold, "Cache invalid, forcing rebuild")
 	} else {
 		console.log("[/cachecheck]".grey.bold, "Cache valid, continuing")
-	}
 	}
 }
 
