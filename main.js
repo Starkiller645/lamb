@@ -7,6 +7,7 @@ var rq_nextclash = require('./endpoints/nextclash.js');
 var rq_summoners = require('./endpoints/summoners.js');
 var rq_bans = require('./endpoints/bans.js');
 var rq_picks = require('./endpoints/picks.js');
+var rq_pingback = require('./endpoints/pingback.js');
 const bodyparser = require('body-parser')
 var urlencode = bodyparser.urlencoded({extended: false})
 const fs = require('fs')
@@ -63,6 +64,12 @@ express_app.get('/nextclash', (req, res) => {
 
 express_app.get('/recent', function(req, res, next) {
   res.send(rq_recent.serve())
+})
+
+express_app.get('/pingback', (req, res) => {
+	serve = rq_pingback.serve()
+	res.status(serve["code"])
+	res.send(serve["message"])
 })
 
 express_app.post('/upcoming', (req, res) => {
