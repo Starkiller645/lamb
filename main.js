@@ -8,6 +8,7 @@ var rq_summoners = require('./endpoints/summoners.js');
 var rq_bans = require('./endpoints/bans.js');
 var rq_picks = require('./endpoints/picks.js');
 var rq_pingback = require('./endpoints/pingback.js');
+var rq_team = require('./endpoints/team.js');
 const bodyparser = require('body-parser')
 var urlencode = bodyparser.urlencoded({extended: false})
 const fs = require('fs')
@@ -32,6 +33,10 @@ express_app.post('/bans', (req, res) => {
 	res.send(serve["message"])
 }
 )
+
+express_app.get('/team', (req, res) => {
+	res.send(rq_team.serve(req, res))
+})
 
 express_app.get('/bans', (req, res) => {
 	res.send(rq_bans.serve(req, res))
