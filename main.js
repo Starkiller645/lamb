@@ -82,6 +82,11 @@ express_app.get('/upcoming', (req, res) => {
   res.send(rq_upcoming.serve())
 })
 
+express_app.get('/num_events', (req, res) => {
+    res.status(200)
+    res.send(rq_upcoming.serve_num())
+})
+
 const cachefile = "./store/playercache.json"
 var summoners = JSON.parse(fs.readFileSync("./config.json"))["team_members"]
 let summoners_data = []

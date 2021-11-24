@@ -73,7 +73,11 @@ var rq_upcoming = {
 		}
 		fs.writeFileSync("./team/events/events.json", JSON.stringify(newEvents, null, 4))
 		return fs.readFileSync("./team/events/events.json")
-	}
+	},
+    serve_num: function() {
+        var events = JSON.parse(fs.readFileSync("./team/events/events.json"))
+        return String(events.length)
+    }
 
 }
 
