@@ -16,12 +16,14 @@ var rq_livegame = {
 	manifestdirs: ["./store/live/"],
 	required: [],
 	update: (req, res) => {
-		console.log("[/live]".bold.brightMagenta, "Received new", "live".bold.brightMagenta, "game data")
-		var data = JSON.parse(req.body)
+		var data = req.body
 		var livegame = JSON.parse(fs.readFileSync("./store/live/livegame.json"))
 		if(livegame["ally"] == undefined) {
 			livegame["ally"] = {}
 		}
+        if(livegame["enemy"] == undefined) {
+            livegame["enemy"] = {}
+        }
 		if(data["event"] == undefined) {
 			if(data["ally"] != undefined && data["enemy"] != undefined) {
 				livegame["ally"]["champs"] = data["ally"]
@@ -32,17 +34,17 @@ var rq_livegame = {
 				livegame["enemy"]["kills"] = data["enemykills"]
 			}
 		} else {
-			if(data["event"] == "start") { 
+			if(data["event"] == "start") {
+                console.log("[/live]".bold.yellow, "Live Game update:", "start".yellow)
 				var start_time = Date.now()
 				livegame["time"] = start_time;
 			}
 		}
-		console.log(livegame)
 		fs.writeFileSync("./store/live/livegame.json", JSON.stringify(livegame, null, 4))
 		if(data["event"] == "end") {
+            console.log("[/live]".bold.yellow, "Live Game update:", "finish".yellow)
 			fs.writeFileSync("./store/live/livegame.json", "{}")
 		}
-		console.log("[/live]".bold.brightMagenta, "Live update finished")
 		return {
 			code: 200,
 			message: "OK"
