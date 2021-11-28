@@ -9,6 +9,7 @@ var rq_bans = require('./endpoints/bans.js');
 var rq_picks = require('./endpoints/picks.js');
 var rq_pingback = require('./endpoints/pingback.js');
 var rq_team = require('./endpoints/team.js');
+var rq_livegame = require('./endpoints/livegame.js')
 const bodyparser = require('body-parser')
 var urlencode = bodyparser.urlencoded({extended: false})
 const fs = require('fs')
@@ -26,6 +27,18 @@ console.log("┗━━━━━━━━━━━━━━━━━━━━━�
 express_app.use(express.json())
 
 // Endpoint routing values
+
+express_app.get('/livegame', (req, res) => {
+	serve = rq_livegame.serve(req, res)
+	res.status(serve["code"])
+	res.send(serve["message"])
+})
+
+express_app.post('/livegame', (req, res) => {
+	serve = rq_livegame.update(req, res)
+	res.status(serve["code"])
+	res.send(serve["message"])
+})
 
 express_app.post('/bans', (req, res) => {
 	serve = rq_bans.update(req, res)
@@ -95,11 +108,11 @@ express_app.get('/num_events', (req, res) => {
 const cachefile = "./store/playercache.json"
 var summoners = JSON.parse(fs.readFileSync("./config.json"))["team_members"]
 let summoners_data = []
-const manifest_list = [rq_recent.manifest, rq_upcoming.manifest, rq_nextclash.manifest, rq_summoners.manifest, rq_bans.manifest, rq_picks.manifest]
+const manifest_list = [rq_recent.manifest, rq_upcoming.manifest, rq_nextclash.manifest, rq_summoners.manifest, rq_bans.manifest, rq_picks.manifest, rq_livegame.manifest]
 let manifest = [].concat(...manifest_list)
-const manifest_dirs_list = [rq_recent.manifestdirs, rq_upcoming.manifestdirs, rq_nextclash.manifestdirs, rq_summoners.manifestdirs, rq_bans.manifestdirs, rq_picks.manifestdirs]
+const manifest_dirs_list = [rq_recent.manifestdirs, rq_upcoming.manifestdirs, rq_nextclash.manifestdirs, rq_summoners.manifestdirs, rq_bans.manifestdirs, rq_picks.manifestdirs, rq_livegame.manifestdirs]
 let manifestdirs = [].concat(...manifest_dirs_list)
-const required_list = [rq_recent.required, rq_upcoming.required, rq_nextclash.required, rq_summoners.required, rq_bans.required, rq_picks.required]
+const required_list = [rq_recent.required, rq_upcoming.required, rq_nextclash.required, rq_summoners.required, rq_bans.required, rq_picks.required, rq_livegame.required]
 let required = [].concat(...required_list)
 
 function check_manifest() {
