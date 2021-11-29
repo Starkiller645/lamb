@@ -1,12 +1,40 @@
 #!/bin/bash
 
-GET_URLS=(upcoming nextclash summoners/Starkiller645 summoners/SGB2006 recent bans picks)
-echo -e "\033[1m\033[37m[lambtest]\033[0m Testing API endpoints on localhost:3080"
-sleep 5 
+SHORT=u:,p:
+LONG=url:,port:
+OPTS=$(getopt --alternative --name lambtest --options $SHORT --longoptions $LONG -- "$@")
+eval set -- "$OPTS"
+
+GET_URLS=(upcoming nextclash summoners/Starkiller645 summoners/SGB2006 recent bans picks livegame)
+PORT=80
+URL="https://lamb.jacobtye.dev"
+while :
+do
+  case "$1" in
+    -u | --url )
+      URL="$2"
+      shift 2
+      ;;
+    -p | --port )
+      PORT="$2"
+      shift 2
+      ;;
+    --)
+      shift;
+      break
+      ;;
+    *)
+      echo "Unexpected option: $1"
+      help
+      ;;
+  esac
+done
+echo -e "\033[1m\033[37m[lambtest]\033[0m Testing API endpoints on ${URL}:${PORT}"
+sleep 5
 for ep in "${GET_URLS[@]}"
 do
 	IDENT=$(tr "/" "." <<< ${ep})
-	RES_CODE=$(http GET "localhost:3080/${ep}" --headers > temp_${IDENT}.txt; cat temp_${IDENT}.txt | head -n 1)
+	RES_CODE=$(http GET "${URL}:${PORT}/${ep}" --headers > temp_${IDENT}.txt; cat temp_${IDENT}.txt | head -n 1)
 	if echo ${RES_CODE} | grep -q "HTTP/1.1 200 OK";
 	then
 		echo -e "\033[1m[/${ep}]\033[32m Passed!\033[0m"
