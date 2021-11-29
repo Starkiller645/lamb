@@ -12,8 +12,19 @@ const wss = ws.createServer({
 	key: fs.readFileSync(config["privkey_file"], 'utf8')
 });
 
-const ws_local = ws.createServer();
-
 console.log("[/websockets]".bold.brightMagenta, "Initialised");
 
+wss.on('connection', (sock) => {
+	sock.send("LAMB/0.1 203 CONNECTED")
+})
 
+var websocket = {
+	update: (endpoint) => {
+		for(var client of wss.clients) {
+			if(client.readyState == ws.OPEN) {
+				client.send("LAMB/0.1 201 UPDATE\n" + endpoint)
+				console.log("LAMB/0.1 201 UPDATE\n" + endpoint)
+			}
+		}
+	}
+}
