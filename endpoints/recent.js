@@ -20,6 +20,10 @@ var rq_recent = {
 	manifestdirs: ["./store", "./team/summoners/"],
 	manifest: ["./store/matchhist.json"],
 	required: ["./apikey.txt", "./config.json"],
+    sock: "",
+    setsock: (ws) => {
+        sock = ws
+    },
   refresh: function () {
     console.log("[/recent]".bold.cyan, "Refreshing...".bold)
     var cache = {}
@@ -64,7 +68,7 @@ var rq_recent = {
       });
 
       for(var id in match_ids_list) {
-        if(match_ids_list[id] >= 3) {
+        if(match_ids_list[id] >= 2) {
           synced_match_ids.push(id)
         }
       }
@@ -148,7 +152,7 @@ var rq_recent = {
               gameType = "SR Clash 5v5"
               break
             default:
-              gameType = "Limited-Time Gamemode (RTM)"
+              gameType = "Limited-Time Gamemode (RGM)"
           }
           var timestamp = match["info"]["gameStartTimestamp"]
           var temp_match = new Match(won, wasDraw, playerCount, teamScore, enemyScore, gameType, timestamp)
@@ -160,6 +164,7 @@ var rq_recent = {
         fs.writeFileSync("./store/matchhist.json", JSON.stringify(match_finals.slice(0, 8), 0 ,4))
         console.log("[/recent]".bold.cyan, "Stored all data to cache")
         console.log("[/recent]".bold.cyan, "Done!".bold)
+        sock.update('recent')
       })
 
 

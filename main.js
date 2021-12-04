@@ -10,6 +10,7 @@ var rq_picks = require('./endpoints/picks.js');
 var rq_pingback = require('./endpoints/pingback.js');
 //var rq_team = require('./endpoints/team.js');
 var rq_livegame = require('./endpoints/livegame.js')
+var websocket = require('./endpoints/websockets.js')
 const bodyparser = require('body-parser')
 var urlencode = bodyparser.urlencoded({extended: false})
 const fs = require('fs')
@@ -24,9 +25,15 @@ console.log("┃ Source code is available @", "https://git.jacobtye.dev/Starkill
 console.log("┃ WOLF was created by", "Jacob Tye".bold.yellow, "@", "https://jacobtye.dev".bold.cyan, "                          ┃")
 console.log("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n")
 
+websocket.init()
+
 express_app.use(express.json())
 
 // Endpoint routing values
+
+rq_livegame.setsock(websocket)
+rq_nextclash.setsock(websocket)
+rq_recent.setsock(websocket)
 
 express_app.get('/livegame', (req, res) => {
 	serve = rq_livegame.serve(req, res)
@@ -38,12 +45,14 @@ express_app.post('/livegame', (req, res) => {
 	serve = rq_livegame.update(req, res)
 	res.status(serve["code"])
 	res.send(serve["message"])
+    websocket.update('livegame')
 })
 
 express_app.post('/bans', (req, res) => {
 	serve = rq_bans.update(req, res)
 	res.status(serve["code"])
 	res.send(serve["message"])
+    websocket.update('bans')
 }
 )
 
@@ -59,6 +68,7 @@ express_app.post('/picks', (req, res) => {
 	serve = rq_picks.update(req, res)
 	res.status(serve["code"])
 	res.send(serve["message"])
+    websocket.update('picks')
 }
 )
 
@@ -74,6 +84,8 @@ express_app.post('/summoners/:summoner', urlencode, (req, res) => {
 	res.status(serve["code"])
 	res.set("Content-Type", "application/json")
 	res.send(serve["message"])
+    websocket.update('summoners')
+    websocket.update('team')
 })
 
 express_app.get('/nextclash', (req, res) => {
@@ -94,6 +106,7 @@ express_app.post('/upcoming', (req, res) => {
 	serve = rq_upcoming.update(req, res)
 	res.status(serve["code"])
 	res.send(serve["message"])
+    websocket.update('upcoming')
 })
 
 express_app.get('/upcoming', (req, res) => {

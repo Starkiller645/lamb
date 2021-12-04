@@ -20,6 +20,10 @@ var rq_nextclash = {
 	manifestdirs: ["./store"],
 	manifest: ["./store/nextclash.json"],
 	required: ["./apikey.txt"],
+    sock: "",
+    setsock: (ws) => {
+        sock = ws
+    },
 	refresh: function() {
 		console.log("[/nextclash]".bold.cyan, "Refreshing...".bold) 
 		lol.get("euw1", "clash.getTournaments").then((data) => {
@@ -47,6 +51,7 @@ var rq_nextclash = {
 			fs.writeFileSync("./store/nextclash.json", JSON.stringify(clashData, null, 4))
 
 			console.log("[/nextclash]".bold.cyan, "Done!".bold)
+            sock.update('nextclash')
 		})
 	},
 
