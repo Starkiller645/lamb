@@ -119,5 +119,6 @@ dist
 # Project files not to be added
 apikey.txt
 config.json
+package-jock.json
 store
 team
