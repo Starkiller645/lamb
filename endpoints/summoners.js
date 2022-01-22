@@ -40,7 +40,7 @@ var rq_summoners = {
 		if(data.name != typeof undefined && data.position != typeof undefined && data.mains != typeof undefined) {
 			if(!["top", "jgl", "mid", "bot", "sup"].includes(data.position)) return {code: 400, message: '{"response": 400, "err": "err_invalid_param", "message": "Invalid value for position"}'}
 			var rank
-			if(JSON.parse(fs.readFileSync("./team/summoners/" + summoner_name + "/metadata.json")).rank != typeof undefined) {
+			if(JSON.parse(fs.readFileSync("./team/summoners/" + summoner_name + "/metadata.json")).rank == typeof undefined) {
 				rank = "Unranked"
 			} else {
 				rank = JSON.parse(fs.readFileSync("./team/summoners/" + summoner_name + "/metadata.json")).rank
