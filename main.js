@@ -8,7 +8,7 @@ var rq_summoners = require('./endpoints/summoners.js');
 var rq_bans = require('./endpoints/bans.js');
 var rq_picks = require('./endpoints/picks.js');
 var rq_pingback = require('./endpoints/pingback.js');
-//var rq_team = require('./endpoints/team.js');
+var rq_team = require('./endpoints/team.js');
 var rq_livegame = require('./endpoints/livegame.js')
 var websocket = require('./endpoints/websockets.js')
 const bodyparser = require('body-parser')
@@ -110,12 +110,19 @@ express_app.post('/upcoming', (req, res) => {
 })
 
 express_app.get('/upcoming', (req, res) => {
+  res.set("Content-Type", "application/json")
   res.send(rq_upcoming.serve())
 })
 
 express_app.get('/num_events', (req, res) => {
     res.status(200)
     res.send(rq_upcoming.serve_num())
+})
+
+express_app.get('/team', (req, res) => {
+    var serve = rq_team.serve()
+    res.status(serve.code["code"])
+    res.send(serve.message["message"])
 })
 
 const cachefile = "./store/playercache.json"

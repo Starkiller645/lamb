@@ -155,7 +155,23 @@ var rq_recent = {
               gameType = "Limited-Time Gamemode (RGM)"
           }
           var timestamp = match["info"]["gameStartTimestamp"]
-          var temp_match = new Match(won, wasDraw, playerCount, teamScore, enemyScore, gameType, timestamp)
+          var game_length = match["info"]["gameDuration"]
+          if(typeof match["info"]["gameEndTimestamp"] == typeof undefined) {
+            game_length /= 1000
+          }
+
+          var mins = Math.floor(game_length / 60)
+          var secs = game_length % 60
+
+          var final_time = String(mins) + ":"
+          var str_secs = String(secs)
+          if(secs < 10) {
+            str_secs = "0" + str_secs
+          }
+
+          final_time += str_secs
+
+          var temp_match = new Match(won, wasDraw, playerCount, teamScore, enemyScore, gameType, timestamp, final_time)
           match_finals.push(temp_match)
         }
         match_finals.sort((a, b) => {
