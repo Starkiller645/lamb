@@ -50,7 +50,7 @@ var rq_upcoming = {
 						}
 					}
 					events.sort((a, b) => {
-						return b["timestamp"] - a["timestamp"]
+						return a["timestamp"] - b["timestamp"]
 					})
 					fs.writeFileSync(event_store, JSON.stringify(events, null, 4))
 					console.log("[/upcoming]".bold.brightBlue, "Done!".bold)
