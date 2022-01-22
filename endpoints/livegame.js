@@ -89,48 +89,50 @@ var rq_livegame = {
         var data = String(fs.readFileSync("./store/live/riot.json"))
         var riotdata = JSON.parse(data)
         gt = "LOADING"
-        if(typeof riotdata["gameQueueConfigId"] == typeof undefined) {
-            return {
-                code: 200,
-                message: JSON.stringify(livegame, null, 4)
-            }
-        }
-        switch(riotdata["gameQueueConfigId"]) {
-                                 case 400:
-                                        gt = "SR DRAFT 5v5"
-                                        break
-                                    case 420:
-                                        gt = "SR RANKED SOLO 5v5"
-                                        break
-                                    case 430:
-                                        gt = "SR BLIND 5v5"
-                                        break
-                                    case 440:
-                                        gt = "SR RANKED FLEX 5v5"
-                                        break
-                                    case 450:
-                                        gt = "HA ARAM 5v5"
-                                        break
-                                    case 700:
-                                        gt = "SR CLASH TOURNAMENT 5v5"
-                                        break
-                                    case 830:
-                                        gt = "SR INTRO BOTS 5v5"
-                                        break
-                                    case 840:
-                                        gt = "SR BEGINNER BOTS 5v5"
-                                        break
-                                    case 850:
-                                        gt = "SR INTERMEDIATE BOTS 5v5"
-                                        break
-                                    default:
-                                        gt = "LIMITED-TIME GAMEMODE"
+        try {
+            switch(riotdata["gameQueueConfigId"]) {
+                                     case 400:
+                                            gt = "SR DRAFT 5v5"
+                                            break
+                                        case 420:
+                                            gt = "SR RANKED SOLO 5v5"
+                                            break
+                                        case 430:
+                                            gt = "SR BLIND 5v5"
+                                            break
+                                        case 440:
+                                            gt = "SR RANKED FLEX 5v5"
+                                            break
+                                        case 450:
+                                            gt = "HA ARAM 5v5"
+                                            break
+                                        case 700:
+                                            gt = "SR CLASH TOURNAMENT 5v5"
+                                            break
+                                        case 830:
+                                            gt = "SR INTRO BOTS 5v5"
+                                            break
+                                        case 840:
+                                            gt = "SR BEGINNER BOTS 5v5"
+                                            break
+                                        case 850:
+                                            gt = "SR INTERMEDIATE BOTS 5v5"
+                                            break
+                                        default:
+                                            gt = "LIMITED-TIME GAMEMODE"
                                         break
                                 }
         livegame["gametype"] = gt
         return {
             code: 200,
             message: JSON.stringify(livegame, null, 4)
+        }
+        } catch(TypeError) {
+            livegame["gametype"] = "CUSTOM"
+            return {
+                code: 200,
+                message: JSON.stringify(livegame, null, 4)
+            }
         }
 	}
 }
