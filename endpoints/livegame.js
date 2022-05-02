@@ -21,28 +21,29 @@ var rq_livegame = {
 		if(livegame["ally"] == undefined) {
 			livegame["ally"] = {}
 		}
-        if(livegame["enemy"] == undefined) {
-            livegame["enemy"] = {}
-        }
-		if(data["event"] == undefined) {
-			if(data["ally"] != undefined && data["enemy"] != undefined) {
-				livegame["ally"]["champs"] = data["ally"]
-				livegame["enemy"]["champs"] = data["enemy"]
-				livegame["gametype"] = data["gametype"]
-			} else if(data["allykills"] != undefined && data["enemykills"] != undefined) {
-				livegame["ally"]["kills"] = data["allykills"]
-				livegame["enemy"]["kills"] = data["enemykills"]
-			}
-		} else {
-			if(data["event"] == "start") {
-                console.log("[/live]".bold.yellow, "Live Game update:", "start".yellow)
-				var start_time = Date.now()
-				livegame["time"] = start_time;
-			}
+	        if(livegame["enemy"] == undefined) {
+        		livegame["enemy"] = {}
+	        }
+		if(data["event"] == "metadata") {
+			console.log("[/live]".bold.yellow, "Live Game update:", "metadata".yellow)
+			livegame["ally"]["champs"] = data["ally"]["champs"]
+			livegame["enemy"]["champs"] = data["enemy"]["champs"]
+			livegame["ally"]["kills"] = 0
+			livegame["enemy"]["kills"] = 0
+			livegame["gametype"] = "NO DATA"
+			var start_time = parseInt(data["time"])
+			livegame["starttime"] = start_time * 1000;
+		}
+		if(data["event"] == "start") {
+			console.log("[/live]".bold.yellow, "Live Game update:", "start".yellow)
+		}
+		if(data["event"] == "update") {
+			livegame["ally"]["kills"] = data["ally"]["kills"]
+			livegame["enemy"]["kills"] = data["enemy"]["kills"]
 		}
 		fs.writeFileSync("./store/live/livegame.json", JSON.stringify(livegame, null, 4))
 		if(data["event"] == "end") {
-            console.log("[/live]".bold.yellow, "Live Game update:", "finish".yellow)
+	                console.log("[/live]".bold.yellow, "Live Game update:", "finish".yellow)
 			fs.writeFileSync("./store/live/livegame.json", "{}")
 		}
 		return {
