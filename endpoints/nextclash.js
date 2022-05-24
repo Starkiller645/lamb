@@ -1,58 +1,59 @@
-/////////////////////////////////////////////
+/// //////////////////////////////////////////
 //            Lamb API Endpoints           //
-/////////////////////////////////////////////
+/// //////////////////////////////////////////
 // Endpoint: GET /nextclash
 // Ident: [/nextclash]
 // Description: Returns a JSON Clash object detailing only the next or current (current pref.) clash
 
-const fs = require('fs')
-const https = require('https')
-const cachefile = "./store/playercache.json"
-const TeemoJS = require('teemojs')
-const Clash = require('../models/clash.js')
-const colors = require('colors')
+const fs = require('fs');
+const https = require('https');
 
-const api_key = String(fs.readFileSync("./apikey.txt")).trim()
+const cachefile = './store/playercache.json';
+const TeemoJS = require('teemojs');
+const colors = require('colors');
+const Clash = require('../models/clash.js');
 
-let lol = TeemoJS(api_key)
+const api_key = String(fs.readFileSync('./apikey.txt')).trim();
 
-var rq_nextclash = {
-	manifestdirs: ["./store"],
-	manifest: ["./store/nextclash.json"],
-	required: ["./apikey.txt"],
-	refresh: function() {
-		console.log("[/nextclash]".bold.cyan, "Refreshing...".bold) 
-		lol.get("euw1", "clash.getTournaments").then((data) => {
-			var clash = data
-			var nextclash = data[0]
-			if(typeof nextclash == typeof undefined) {
-				if(!fs.existsSync("./store/nextclash.json")) fs.writeFileSync("./store/nextclash.json", "{}")
-				console.log("[/nextclash]".bold.cyan, "No available data, did not update")
-				return
-			}
+const lol = TeemoJS(api_key);
 
-			var name = nextclash["nameKey"]
-			name = name[0].toUpperCase() + name.slice(1)
+const rq_nextclash = {
+  manifestdirs: ['./store'],
+  manifest: ['./store/nextclash.json'],
+  required: ['./apikey.txt'],
+  refresh() {
+    console.log('[/nextclash]'.bold.cyan, 'Refreshing...'.bold);
+    lol.get('euw1', 'clash.getTournaments').then((data) => {
+      const clash = data;
+      const nextclash = data[0];
+      if (typeof nextclash === typeof undefined) {
+        if (!fs.existsSync('./store/nextclash.json')) fs.writeFileSync('./store/nextclash.json', '{}');
+        console.log('[/nextclash]'.bold.cyan, 'No available data, did not update');
+        return;
+      }
 
-			var date = new Date()
-			date.setTime(nextclash["schedule"][0]["startTime"])
-			var dateString = String(date.getDate()) + "/" + String(date.getMonth() + 1)
+      let name = nextclash.nameKey;
+      name = name[0].toUpperCase() + name.slice(1);
 
-			var time = new Date()
-			time.setTime(nextclash["schedule"][0]["registrationTime"])
-			var timeString = (String(time.getHours()) + "0").slice(0, 2) + ":" + (String(time.getMinutes()) + "0").slice(0, 2) + ":" + (String(time.getSeconds()) + "0").slice(0, 2)
+      const date = new Date();
+      date.setTime(nextclash.schedule[0].startTime);
+      const dateString = `${String(date.getDate())}/${String(date.getMonth() + 1)}`;
 
-			var clashData = new Clash(name, dateString, timeString)
+      const time = new Date();
+      time.setTime(nextclash.schedule[0].registrationTime);
+      const timeString = `${(`${String(time.getHours())}0`).slice(0, 2)}:${(`${String(time.getMinutes())}0`).slice(0, 2)}:${(`${String(time.getSeconds())}0`).slice(0, 2)}`;
 
-			fs.writeFileSync("./store/nextclash.json", JSON.stringify(clashData, null, 4))
+      const clashData = new Clash(name, dateString, timeString);
 
-			console.log("[/nextclash]".bold.cyan, "Done!".bold)
-		})
-	},
+      fs.writeFileSync('./store/nextclash.json', JSON.stringify(clashData, null, 4));
 
-	serve: function(req, res) {
-		var nextClash = String(fs.readFileSync("./store/nextclash.json"))
-		return nextClash
-	}
-}
-module.exports = rq_nextclash
+      console.log('[/nextclash]'.bold.cyan, 'Done!'.bold);
+    });
+  },
+
+  serve(req, res) {
+    const nextClash = String(fs.readFileSync('./store/nextclash.json'));
+    return nextClash;
+  },
+};
+module.exports = rq_nextclash;
