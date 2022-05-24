@@ -116,6 +116,12 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# Package lock file
+package-lock.json
+
+# CTAGS generated tag file
+tags
+
 # Project files not to be added
 apikey.txt
 config.json
