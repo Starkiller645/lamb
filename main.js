@@ -10,6 +10,7 @@ var rq_picks = require("./endpoints/picks.js");
 var rq_pingback = require("./endpoints/pingback.js");
 var rq_team = require("./endpoints/team.js");
 var rq_livegame = require("./endpoints/livegame.js");
+var lamb_bus = require("./endpoints/bus.js");
 const err = require("./endpoints/errors.js");
 const bodyparser = require("body-parser");
 var urlencode = bodyparser.urlencoded({ extended: false });
@@ -50,6 +51,8 @@ console.log(
 console.log(
   "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n"
 );
+
+lamb_bus.init();
 
 express_app.use(express.json());
 

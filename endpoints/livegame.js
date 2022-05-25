@@ -11,6 +11,7 @@ const https = require("https");
 const cachefile = "./store/playercache.json";
 const colors = require("colors");
 const Lockins = require("../models/lockins.js");
+const bus = require("../endpoints/websockets.js");
 
 const rq_livegame = {
   manifest: ["./store/live/livegame.json"],
@@ -46,14 +47,17 @@ const rq_livegame = {
       livegame.ally.kills = data.ally.kills;
       livegame.enemy.kills = data.enemy.kills;
     }
-    fs.writeFileSync(
-      "./store/live/livegame.json",
-      JSON.stringify(livegame, null, 4)
-    );
     if (data.event == "end") {
       console.log("[/live]".bold.yellow, "Live Game update:", "finish".yellow);
       fs.writeFileSync("./store/live/livegame.json", "{}");
     }
+    fs.writeFileSync(
+      "./store/live/livegame.json",
+      JSON.stringify(livegame, null, 4)
+    );
+
+    bus.broadcast("live", livegame);
+
     return {
       code: 200,
       message: "OK",
