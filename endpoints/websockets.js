@@ -10,7 +10,6 @@ const config = JSON.parse(fs.readFileSync("./config.json"));
 
 const lamb_bus = {
   broadcast(ident, payload) {
-    console.log("Sending data to bus...");
     const sock = new ws.WebSocket("ws://localhost:30800/");
     sock.on("open", () => {
       sock.send(

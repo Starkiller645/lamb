@@ -44,7 +44,6 @@ const lamb_bus = {
 
     bus_server.on("connection", (sock) => {
       sock.on("message", (data) => {
-        console.log("Received data from " + JSON.parse(data).ident);
         for (var client of broadcast_server.clients) {
           if (client.readyState === ws.OPEN && client !== sock) {
             client.send(data);

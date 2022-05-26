@@ -19,14 +19,24 @@ const rq_livegame = {
   required: [],
   update: (req, res) => {
     const data = req.body;
-    const livegame = JSON.parse(fs.readFileSync("./store/live/livegame.json"));
+    var livegame = JSON.parse(fs.readFileSync("./store/live/livegame.json"));
+    const live_copy = JSON.parse(JSON.stringify(livegame));
+    var ident_tag = "live";
     if (livegame.ally == undefined) {
       livegame.ally = {};
     }
     if (livegame.enemy == undefined) {
       livegame.enemy = {};
     }
+
+    if (data.event == "champSelect") {
+      ident_tag += "/champ-select";
+      livegame.ally = data.ally;
+      livegame.enemy = data.enemy;
+    }
+
     if (data.event == "metadata") {
+      ident_tag += "/metadata";
       console.log(
         "[/live]".bold.yellow,
         "Live Game update:",
@@ -41,22 +51,30 @@ const rq_livegame = {
       livegame.starttime = start_time * 1000;
     }
     if (data.event == "start") {
+      ident_tag += "/start";
+      livegame = {};
       console.log("[/live]".bold.yellow, "Live Game update:", "start".yellow);
     }
     if (data.event == "update") {
+      ident_tag += "/update";
       livegame.ally.kills = data.ally.kills;
       livegame.enemy.kills = data.enemy.kills;
     }
     if (data.event == "end") {
+      ident_tag += "/end";
+      livegame = {};
       console.log("[/live]".bold.yellow, "Live Game update:", "finish".yellow);
       fs.writeFileSync("./store/live/livegame.json", "{}");
     }
-    fs.writeFileSync(
-      "./store/live/livegame.json",
-      JSON.stringify(livegame, null, 4)
-    );
 
-    bus.broadcast("live", livegame);
+    if (JSON.stringify(livegame) != JSON.stringify(live_copy)) {
+      fs.writeFileSync(
+        "./store/live/livegame.json",
+        JSON.stringify(livegame, null, 4)
+      );
+
+      bus.broadcast(ident_tag, livegame);
+    }
 
     return {
       code: 200,
