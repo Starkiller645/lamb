@@ -29,10 +29,22 @@ const rq_livegame = {
       livegame.enemy = {};
     }
 
-    if (data.event == "champSelect") {
+    if (data.event == "champ-select/start") {
+      livegame = { phase: "champ-select" };
+    }
+
+    if (data.event == "champ-select") {
       ident_tag += "/champ-select";
       livegame.ally = data.ally;
       livegame.enemy = data.enemy;
+    }
+
+    if (data.event == "champ-select/await") {
+      livegame = { phase: "loading" };
+    }
+
+    if (data.event == "champ-select/end") {
+      livegame = { phase: "waiting" };
     }
 
     if (data.event == "metadata") {
@@ -52,7 +64,7 @@ const rq_livegame = {
     }
     if (data.event == "start") {
       ident_tag += "/start";
-      livegame = {};
+      livegame = { phase: "ingame" };
       console.log("[/live]".bold.yellow, "Live Game update:", "start".yellow);
     }
     if (data.event == "update") {
@@ -62,7 +74,7 @@ const rq_livegame = {
     }
     if (data.event == "end") {
       ident_tag += "/end";
-      livegame = {};
+      livegame = { phase: "waiting" };
       console.log("[/live]".bold.yellow, "Live Game update:", "finish".yellow);
       fs.writeFileSync("./store/live/livegame.json", "{}");
     }
