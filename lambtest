@@ -5,7 +5,7 @@ LONG=url:,port:
 OPTS=$(getopt --alternative --name lambtest --options $SHORT --longoptions $LONG -- "$@")
 eval set -- "$OPTS"
 
-GET_URLS=(upcoming nextclash summoners/Starkiller645 summoners/SGB2006 recent bans picks livegame)
+GET_URLS=(upcoming nextclash summoners/Starkiller645 summoners/TS%20SGB recent bans picks livegame)
 PORT=80
 URL="https://lamb.jacobtye.dev"
 while :
